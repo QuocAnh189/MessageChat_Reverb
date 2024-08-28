@@ -1,9 +1,13 @@
 import React from "react";
-
 import { Link, usePage } from "@inertiajs/react";
+
+//components
 import UserAvatar from "./UserAvatar";
 import GroupAvatar from "./GroupAvatar";
 import UserOptionsDropdown from "./UserOptionsDropdown";
+
+//dayjs
+import dayjs from "dayjs";
 
 const ConversationItem = ({
     conversation,
@@ -14,27 +18,31 @@ const ConversationItem = ({
     const currentUser = page.props.auth.user;
     let classes = "border-transparent";
 
+    // console.log("selectedConversation", selectedConversation);
+    // console.log("conversation", conversation);
+
     if (selectedConversation) {
         if (
             !selectedConversation.is_group &&
             !conversation.is_group &&
             selectedConversation.id === conversation.id
         ) {
-            classes = "border-blue-500 bg-black/20";
+            classes = "border-blue-500 bg-black/30";
         }
     }
+
     return (
         <Link
             href={
-                conversation.id_group
+                conversation.is_group
                     ? route("chat.group", conversation)
                     : route("chat.user", conversation)
             }
             preserveState
             className={
-                "conversation-item flex items-center p-2 gap-2 text-gray-300 transition-all cursor-pointer border-l-4 hover:bg-black/30" +
+                "conversation-item flex items-center p-2 gap-2 text-gray-300 transition-all cursor-pointer border-l-4 hover:bg-black/30 " +
                 classes +
-                (conversation.id_user && currentUser.is_admin ? "pr-2" : "pr-4")
+                (conversation.is_user && currentUser.is_admin ? "pr-2" : "pr-4")
             }
         >
             {conversation.is_user && (
@@ -57,7 +65,9 @@ const ConversationItem = ({
                     </h3>
                     {conversation.last_message_date && (
                         <span className="text-nowrap">
-                            {conversation.last_message_date}
+                            {dayjs(conversation.last_message_date).format(
+                                "DD/MM HH:mm A"
+                            )}
                         </span>
                     )}
                 </div>
