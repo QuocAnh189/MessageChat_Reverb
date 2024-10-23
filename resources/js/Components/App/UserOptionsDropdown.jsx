@@ -1,22 +1,20 @@
 import React, { Fragment } from "react";
 
-import {
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuItems,
-    Transition,
-} from "@headlessui/react";
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
 
 import {
     EllipsisVerticalIcon,
     LockClosedIcon,
     LockOpenIcon,
     ShieldCheckIcon,
+    UserIcon,
 } from "@heroicons/react/20/solid";
 import axios from "axios";
+import { useEventBus } from "@/EventBus";
 
 function UserOptionsDropdown({ conversation }) {
+    const { emit } = useEventBus();
+
     const changeUserRole = () => {
         if (!conversation.is_user) {
             return;
@@ -25,7 +23,7 @@ function UserOptionsDropdown({ conversation }) {
         axios
             .post(route("user.changeRole", conversation.id))
             .then((res) => {
-                console.log(res.data);
+                emit("toast.show", res.data.message);
             })
             .catch((err) => {
                 console.log(err);
@@ -40,6 +38,7 @@ function UserOptionsDropdown({ conversation }) {
         axios
             .post(route("user.blockUnblock", conversation.id))
             .then((res) => {
+                emit("toast.show", res.data.message);
                 console.log(res.data);
             })
             .catch((err) => {
@@ -72,9 +71,7 @@ function UserOptionsDropdown({ conversation }) {
                                     <button
                                         onClick={onBlockUser}
                                         className={`${
-                                            active
-                                                ? "bg-black/30 text-white"
-                                                : "text-gray-100"
+                                            active ? "bg-black/30 text-white" : "text-gray-100"
                                         } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                     >
                                         {conversation?.blocked_at && (
@@ -101,9 +98,7 @@ function UserOptionsDropdown({ conversation }) {
                                     <button
                                         onClick={changeUserRole}
                                         className={`${
-                                            active
-                                                ? "bg-black/30 text-white"
-                                                : "text-gray-100"
+                                            active ? "bg-black/30 text-white" : "text-gray-100"
                                         } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                     >
                                         {conversation?.is_admin && (

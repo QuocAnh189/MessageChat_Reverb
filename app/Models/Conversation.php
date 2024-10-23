@@ -15,11 +15,6 @@ class Conversation extends Model
         'last_message_id'
     ];
 
-    public function lastMessage()
-    {
-        return $this->belongsTo(Message::class, 'last_message_id');
-    }
-
     public function user1()
     {
         return $this->belongsTo(User::class, 'user_id1');
@@ -28,6 +23,11 @@ class Conversation extends Model
     public function user2()
     {
         return $this->belongsTo(User::class, 'user_id2');
+    }
+
+    public function lastMessage()
+    {
+        return $this->belongsTo(Message::class, 'last_message_id');
     }
 
     public static function getConversationsForSidebar(User $user)
