@@ -1,8 +1,12 @@
 import { Fragment } from "react";
 import { Link } from "@inertiajs/react";
+
+//components
 import { Popover, PopoverButton, PopoverPanel, Transition } from "@headlessui/react";
 import UserAvatar from "./UserAvatar";
-import { ExclamationCircleIcon, UserCircleIcon } from "@heroicons/react/20/solid";
+
+//icon
+import { UserCircleIcon } from "@heroicons/react/20/solid";
 
 const GroupUsersPopover = ({ members = [] }) => {
     return (

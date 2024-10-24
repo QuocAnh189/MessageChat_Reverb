@@ -1,8 +1,10 @@
+import { Link, useForm, usePage } from "@inertiajs/react";
+
+//components
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
-import { Link, useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
 import UserAvatar from "@/Components/App/UserAvatar";
 
@@ -18,7 +20,6 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
 
     const submit = (e) => {
         e.preventDefault();
-
         post(route("profile.update"));
     };
 

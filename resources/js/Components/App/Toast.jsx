@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useEventBus } from "@/EventBus";
 import { v4 as uuidv4 } from "uuid";
 
-const Toast = ({ message }) => {
+//socket
+import { useEventBus } from "@/EventBus";
+
+const Toast = () => {
     const [toast, setToast] = useState([]);
     const { on } = useEventBus();
 

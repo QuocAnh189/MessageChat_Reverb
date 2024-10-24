@@ -1,16 +1,16 @@
-import { router, usePage } from "@inertiajs/react";
 import { useState, useEffect } from "react";
+import { router, usePage } from "@inertiajs/react";
 
 //components
 import TextInput from "@/Components/TextInput";
 import ConversationItem from "@/Components/App/ConversationItem";
+import GroupModal from "@/Components/App/GroupModal";
 
 //icons
 import PencilSquareIcon from "@heroicons/react/20/solid/PencilSquareIcon";
 
-//context
+//socket
 import { useEventBus } from "@/EventBus";
-import GroupModal from "@/Components/App/GroupModal";
 
 const ChatLayout = ({ children }) => {
     const page = usePage();
@@ -25,7 +25,7 @@ const ChatLayout = ({ children }) => {
 
     const isUserOnline = (userId) => onlineUsers[userId];
 
-    console.log("conversations", conversations);
+    // console.log("conversations", conversations);
 
     const onSearch = (ev) => {
         const search = ev.target.value.toLowerCase();
@@ -49,7 +49,7 @@ const ChatLayout = ({ children }) => {
                     return user;
                 }
 
-                if (message.group_id && user.is_group && user.id === message.group_id) {
+                if (message.group_id && user.is_group && user.id == message.group_id) {
                     user.last_message = message.message;
                     user.last_message_date = message.created_at;
                     return user;
@@ -159,15 +159,11 @@ const ChatLayout = ({ children }) => {
     return (
         <>
             <div className="flex-1 w-full flex overflow-hidden">
-                <div
-                    className={`transition-all w-full sm:w-[220px] md:w-[300px] bg-slate-800 flex flex-col overflow-hidden ${
-                        selectedConversation ? "-ml-[100%] sm:ml-0" : ""
-                    }`}
-                >
+                <div className="transition-all w-full sm:w-[220px] md:w-[300px] bg-slate-800 flex flex-col overflow-hidden">
                     <div className="flex items-center justify-between py-2 px-3 text-xl font-medium text-gray-200 hover:text-gray-200">
                         My Conversation
                         <div className="tooltip tooltip-left" data-tip="Create new Group">
-                            <button onClick={(ev) => setShowGroupModal(true)} className="text-gray-400">
+                            <button onClick={() => setShowGroupModal(true)} className="text-gray-400">
                                 <PencilSquareIcon className="w-4 h-4 inline-block ml-2" />
                             </button>
                         </div>
@@ -176,12 +172,9 @@ const ChatLayout = ({ children }) => {
                         <TextInput onKeyUp={onSearch} placeholder="Filter users and groups" className="w-full" />
                     </div>
                     <div className="flex-1 overflow-auto">
-                        {sortedConversations.map((conversation, index) => (
+                        {sortedConversations.map((conversation) => (
                             <ConversationItem
-                                // key={`${
-                                //     conversation.is_group ? "group_ " : "user_"
-                                // }${conversation.id}`}
-                                key={`conversation_${index}`}
+                                key={`${conversation.is_group ? "group_ " : "user_"}${conversation.id}`}
                                 conversation={conversation}
                                 online={!!isUserOnline(conversation.id)}
                                 selectedConversation={selectedConversation}

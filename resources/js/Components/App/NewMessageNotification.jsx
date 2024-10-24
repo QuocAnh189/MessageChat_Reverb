@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
+
+//socket
 import { useEventBus } from "@/EventBus";
-import { v4 as uuidv4 } from "uuid";
-import UserAvatar from "./UserAvatar";
+
+//components
 import { Link } from "@inertiajs/react";
+import UserAvatar from "./UserAvatar";
+
+//utils
+import { v4 as uuidv4 } from "uuid";
 
 const NewMessageNotification = () => {
     const [toast, setToast] = useState([]);

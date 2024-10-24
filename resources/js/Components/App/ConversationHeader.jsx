@@ -1,27 +1,31 @@
-import React from "react";
-
+import React, { useState } from "react";
 import { Link, usePage } from "@inertiajs/react";
-import { ArrowLeftIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/20/solid";
+
+//component
 import UserAvatar from "./UserAvatar";
 import GroupAvatar from "./GroupAvatar";
 import GroupDescriptionPopover from "./GroupDescriptionPopover";
 import GroupUsersPopover from "./GroupUsersPopover";
+import ModelDeleteGroup from "./ModelDeleteGroup";
+
+//socket
 import { useEventBus } from "@/EventBus";
+
+//icons
+import { ArrowLeftIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/20/solid";
 
 const ConversationHeader = ({ selectedConversation }) => {
     const authUser = usePage().props.auth.user;
     const { emit } = useEventBus();
 
-    const onDeleteGroup = () => {
-        if (!window.confirm("Are you sure you want to delete this group?")) {
-            return;
-        }
-        // console.log(route("group.destroy", selectedConversation.id));
+    const [modelDeleteGroup, setModelDeleteGroup] = useState(false);
 
+    const onDeleteGroup = () => {
         axios
             .delete(route("group.destroy", selectedConversation.id))
             .then((res) => {
-                emit("toast.show", res.data.message);
+                emit("toast.show", "Group deleted successfully");
+                setModelDeleteGroup(false);
             })
             .catch((err) => {
                 console.log(err);
@@ -55,14 +59,17 @@ const ConversationHeader = ({ selectedConversation }) => {
                                 <>
                                     <div data-tip="Edit Group" className="tooltip tooltip-left">
                                         <button
-                                            onClick={(ev) => emit("GroupModal.show", selectedConversation)}
+                                            onClick={() => emit("GroupModal.show", selectedConversation)}
                                             className="text-gray-400 hover:text-gray-200"
                                         >
                                             <PencilSquareIcon className="w-6" />
                                         </button>
                                     </div>
                                     <div data-tip="Delete Group" className="tooltip tooltip-left">
-                                        <button onClick={onDeleteGroup} className="text-gray-400 hover:text-gray-200">
+                                        <button
+                                            onClick={() => setModelDeleteGroup(true)}
+                                            className="text-gray-400 hover:text-gray-200"
+                                        >
                                             <TrashIcon className="w-6" />
                                         </button>
                                     </div>
@@ -72,6 +79,8 @@ const ConversationHeader = ({ selectedConversation }) => {
                     )}
                 </div>
             )}
+
+            <ModelDeleteGroup isOpen={modelDeleteGroup} setIsOpen={setModelDeleteGroup} onDelete={onDeleteGroup} />
         </>
     );
 };

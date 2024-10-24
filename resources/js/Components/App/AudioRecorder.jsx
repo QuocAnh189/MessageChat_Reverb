@@ -1,5 +1,7 @@
-import { MicrophoneIcon, StopCircleIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
+
+//icon
+import { MicrophoneIcon, StopCircleIcon } from "@heroicons/react/20/solid";
 
 const AudioRecorder = ({ fileReady }) => {
     const [mediaRecorder, setMediaRecorder] = useState(null);

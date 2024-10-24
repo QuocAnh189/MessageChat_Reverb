@@ -1,5 +1,9 @@
 import { Fragment, useState } from "react";
+
+//components
 import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, Transition } from "@headlessui/react";
+
+//icon
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
 export default function UserPicker({ value, options, onSelect }) {
@@ -9,13 +13,13 @@ export default function UserPicker({ value, options, onSelect }) {
     const filteredPeople =
         query === ""
             ? options
-            : options
-                  .filter((person) => person.name.toLowerCase().replace(/\s+/g, ""))
-                  .includes(query.toLocaleLowerCase().replace(/\s+/g, ""));
+            : options.filter((person) =>
+                  person.name.toLowerCase().replace(/\s+/g, "").includes(query.toLocaleLowerCase().replace(/\s+/g, ""))
+              );
 
-    const onSelected = (person) => {
-        setSelected(person);
-        onSelect(person);
+    const onSelected = (persons) => {
+        setSelected(persons);
+        onSelect(persons);
     };
 
     return (
@@ -56,7 +60,7 @@ export default function UserPicker({ value, options, onSelect }) {
                             ) : (
                                 filteredPeople.map((person, index) => (
                                     <ComboboxOption
-                                        key={index}
+                                        key={`person-${index}`}
                                         value={person}
                                         className={({ active }) =>
                                             `relative cursor-default select-none py-2 pl-10 pr-4 ${

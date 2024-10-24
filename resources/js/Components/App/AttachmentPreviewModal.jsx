@@ -1,12 +1,14 @@
+import React from "react";
 import { Fragment, useEffect, useMemo, useState } from "react";
 
+//component
 import { Dialog, DialogPanel, Transition, TransitionChild } from "@headlessui/react";
 
-import { PaperClipIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
+//icon
+import { XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 
+//helper
 import { isAudio, isImage, isPDF, isPreviewable, isVideo } from "@/helpers";
-
-import React from "react";
 
 const AttachmentPreviewModal = ({ attachments, index, show = false, onClose = () => {} }) => {
     const [currentIndex, setCurrentIndex] = useState(0);

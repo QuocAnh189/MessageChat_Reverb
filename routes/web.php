@@ -5,13 +5,23 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Models\Conversation;
 use App\Models\Group;
 use App\Models\Message;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function () {
-    return response()->json(['query_test' => 'Success']);
+    $conversation = Conversation::where(function ($query) {
+        $query->where('user_id1', 1)
+            ->where('user_id2', 12);
+    })->orWhere(function ($query) {
+        $query->where('user_id1', 12)
+            ->where('user_id2', 1);
+    })->first();
+
+
+    return response()->json(['query_test' => $conversation->id]);
 })->name('dashboard');
 
 Route::middleware(['auth', 'verified', 'active'])->group(function () {

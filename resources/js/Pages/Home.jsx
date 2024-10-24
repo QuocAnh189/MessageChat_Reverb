@@ -1,34 +1,37 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import axios from "axios";
 
 //layouts
 import ChatLayout from "@/Layouts/ChatLayout";
 
 //components
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import ConversationHeader from "@/Components/App/ConversationHeader";
 import MessageInput from "@/Components/App/MessageInput";
 import MessageItem from "@/Components/App/MessageItem";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import AttachmentPreviewModal from "@/Components/App/AttachmentPreviewModal";
 
 //icons
 import { ChatBubbleLeftRightIcon } from "@heroicons/react/20/solid";
 
 //context
 import { useEventBus } from "@/EventBus";
-import axios from "axios";
-import AttachmentPreviewModal from "@/Components/App/AttachmentPreviewModal";
 
 const Home = ({ selectedConversation = null, messages = null }) => {
+    const loadMoreIntersect = useRef(null);
+    const messagesCtrRef = useRef(null);
+
+    const { on } = useEventBus();
+
     const [localMessages, setLocalMessages] = useState([]);
     const [noMoreMessages, setNoMoreMessages] = useState(false);
     const [scrollFromBottom, setScrollFromBottom] = useState(0);
-    const loadMoreIntersect = useRef(null);
-    const messagesCtrRef = useRef(null);
     const [previewAttachment, setPreviewAttachment] = useState({});
     const [showAttachmentPreview, setShowAttachmentPreview] = useState(false);
-    const { on } = useEventBus();
 
     const messageCreated = (message) => {
-        if (selectedConversation && selectedConversation.is_group && selectedConversation.id === message.group_id) {
+        console.log(selectedConversation, message);
+        if (selectedConversation && selectedConversation.is_group && selectedConversation.id == message.group_id) {
             setLocalMessages((prevMessages) => [...prevMessages, message]);
         }
 
@@ -90,7 +93,6 @@ const Home = ({ selectedConversation = null, messages = null }) => {
     const onAttachmentClick = (attachments, ind) => {
         setPreviewAttachment({ attachments, ind });
         setShowAttachmentPreview(true);
-        // console.log({ attachments, ind });
     };
 
     useEffect(() => {
@@ -109,8 +111,6 @@ const Home = ({ selectedConversation = null, messages = null }) => {
             offDeleted();
         };
     }, [selectedConversation]);
-
-    // console.log("selectedConversations", selectedConversation);
 
     useEffect(() => {
         setLocalMessages(messages ? messages?.data?.reverse() : []);
@@ -165,7 +165,7 @@ const Home = ({ selectedConversation = null, messages = null }) => {
                         )}
                         {localMessages.length > 0 && (
                             <div className="flex-1 flex flex-col">
-                                <div ref={loadMoreIntersect} className=""></div>
+                                <div ref={loadMoreIntersect} className="bg-red-400"></div>
                                 {localMessages?.map((message, index) => (
                                     <MessageItem
                                         key={index}

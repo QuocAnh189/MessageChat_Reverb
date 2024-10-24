@@ -15,8 +15,12 @@ const ConversationItem = ({ conversation, selectedConversation = null, online = 
     let classes = "border-transparent";
 
     if (selectedConversation) {
-        if (!selectedConversation.is_group && !conversation.is_group && selectedConversation.id === conversation.id) {
-            classes = "border-blue-500 bg-black/30";
+        if (
+            (selectedConversation.is_group === conversation.is_group ||
+                selectedConversation.is_user === conversation.is_user) &&
+            selectedConversation.id === conversation.id
+        ) {
+            classes = "border-blue-500 bg-blue-500 ";
         }
     }
 

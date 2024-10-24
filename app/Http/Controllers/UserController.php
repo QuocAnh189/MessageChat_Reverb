@@ -8,7 +8,6 @@ use App\Mail\UserRoleChanged;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -20,8 +19,7 @@ class UserController extends Controller
             'is_admin' => 'boolean',
         ]);
 
-        // $rawPassword = Str::random(8);
-        $rawPassword = '12345678';
+        $rawPassword = 'password';
         $data['password'] = bcrypt($rawPassword);
         $data['email_verified_at'] = now();
 

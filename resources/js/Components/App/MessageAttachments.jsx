@@ -1,5 +1,7 @@
+//icon
 import { PaperClipIcon, ArrowDownTrayIcon, PlayCircleIcon } from "@heroicons/react/20/solid";
 
+//helper
 import { isAudio, isImage, isPDF, isPreviewable, isVideo } from "@/helpers";
 
 const MessageAttachments = ({ attachments, attachmentClick }) => {

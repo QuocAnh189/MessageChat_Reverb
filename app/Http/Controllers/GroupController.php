@@ -33,7 +33,7 @@ class GroupController extends Controller
         $group->update($data);
 
         $group->users()->detach();
-        $group->users()->attach(array_unique([$request->user()->id], ...$user_ids));
+        $group->users()->attach([$request->user()->id, ...$user_ids]);
 
         return redirect()->back();
     }
@@ -46,6 +46,9 @@ class GroupController extends Controller
         if ($group->owner_id !== Auth::id()) {
             abort(403);
         }
+
+        $group->delete();
+        $group->users()->detach();
 
         DeleteGroupJob::dispatch($group)->delay(now()->addSeconds(10));
 

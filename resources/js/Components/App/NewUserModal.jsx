@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
-import { useForm, usePage } from "@inertiajs/react";
-import TextAreaInput from "../TextAreaInput";
+import { useForm } from "@inertiajs/react";
+
+//components
 import InputLabel from "../InputLabel";
 import InputError from "../InputError";
 import Modal from "../Modal";
 import TextInput from "../TextInput";
 import SecondaryButton from "../SecondaryButton";
 import PrimaryButton from "../PrimaryButton";
-import UserPicker from "./UserPicker";
-import { useEventBus } from "@/EventBus";
 import Checkbox from "../Checkbox";
+
+//socket
+import { useEventBus } from "@/EventBus";
 
 export default function NewUserModal({ show = false, onClose = () => {} }) {
     const { emit } = useEventBus();

@@ -1,9 +1,12 @@
-import { Popover, PopoverButton, PopoverPanel, Transition } from "@headlessui/react";
-import { ChevronDownIcon, ExclamationCircleIcon } from "@heroicons/react/20/solid";
 import { Fragment } from "react";
 
+//components
+import { Popover, PopoverButton, PopoverPanel, Transition } from "@headlessui/react";
+
+//icon
+import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
+
 const GroupDescriptionPopover = ({ description }) => {
-    console.log(description);
     return (
         <Popover className="relative">
             {({ open }) => (

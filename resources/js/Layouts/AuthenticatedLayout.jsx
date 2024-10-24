@@ -1,20 +1,25 @@
 import { useState, useEffect } from "react";
-import ApplicationLogo from "@/Components/ApplicationLogo";
-import Dropdown from "@/Components/Dropdown";
-import NavLink from "@/Components/NavLink";
-import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
-import { Link, usePage } from "@inertiajs/react";
+import { usePage } from "@inertiajs/react";
+
+//socket
 import { useEventBus } from "@/EventBus";
+
+//components
+import Dropdown from "@/Components/Dropdown";
+import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import Toast from "@/Components/App/Toast";
-import NewMessageNotification from "@/Components/App/NewMessageNotification";
 import PrimaryButton from "@/Components/PrimaryButton";
-import { UserPlusIcon } from "@heroicons/react/20/solid";
 import NewUserModal from "@/Components/App/NewUserModal";
+import NewMessageNotification from "@/Components/App/NewMessageNotification";
+
+//icon
+import { UserPlusIcon } from "@heroicons/react/20/solid";
 
 export default function Authenticated({ header, children }) {
     const page = usePage();
     const user = page.props.auth.user;
     const conversations = page.props.conversations;
+
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     const [showNewUserModal, setShowNewUserModal] = useState(false);
 
@@ -34,6 +39,7 @@ export default function Authenticated({ header, children }) {
                 .error((error) => console.error("Echo error", error))
                 .listen("SocketMessage", (e) => {
                     const message = e.message;
+                    // console.log(message);
 
                     emit("message.created", message);
 
@@ -67,7 +73,6 @@ export default function Authenticated({ header, children }) {
 
         return () => {
             conversations.forEach((conversation) => {
-                conversations;
                 let channel = `message.group.${conversation.id}`;
 
                 if (conversation.is_user) {
@@ -89,22 +94,8 @@ export default function Authenticated({ header, children }) {
         <>
             <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col h-screen">
                 <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="flex justify-between h-16">
-                            <div className="flex">
-                                <div className="shrink-0 flex items-center">
-                                    <Link href="/">
-                                        <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                                    </Link>
-                                </div>
-
-                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                    <NavLink href={route("dashboard")} active={route().current("dashboard")}>
-                                        Dashboard
-                                    </NavLink>
-                                </div>
-                            </div>
-
+                    <div className="mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex justify-end h-16">
                             <div className="hidden sm:flex sm:items-center sm:ms-6">
                                 <div className="flex ms-3 relative">
                                     {user.is_admin && (
@@ -177,7 +168,7 @@ export default function Authenticated({ header, children }) {
                     <div className={(showingNavigationDropdown ? "block" : "hidden") + " sm:hidden"}>
                         <div className="pt-2 pb-3 space-y-1">
                             <ResponsiveNavLink href={route("dashboard")} active={route().current("dashboard")}>
-                                Dashboard
+                                Home
                             </ResponsiveNavLink>
                         </div>
 
@@ -209,7 +200,7 @@ export default function Authenticated({ header, children }) {
             </div>
             <Toast />
             <NewMessageNotification />
-            <NewUserModal show={showNewUserModal} onClose={(ev) => setShowNewUserModal(false)} />
+            <NewUserModal show={showNewUserModal} onClose={() => setShowNewUserModal(false)} />
         </>
     );
 }

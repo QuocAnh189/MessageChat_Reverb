@@ -56,11 +56,17 @@ class Conversation extends Model
             $conversation->update([
                 'last_message_id' => $message->id
             ]);
+            $message->update([
+                'conversation_id' => $conversation->id
+            ]);
         } else {
-            Conversation::create([
+            $createdConversation = Conversation::create([
                 'user_id1' => $userId1,
                 'user_id2' => $userId2,
                 'last_message_id' => $message->id
+            ]);
+            $message->update([
+                'conversation_id' => $createdConversation->id
             ]);
         }
     }

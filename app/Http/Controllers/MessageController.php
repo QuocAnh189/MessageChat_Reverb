@@ -76,7 +76,7 @@ class MessageController extends Controller
 
         $message = Message::create($data);
 
-        $attachments = [];
+        // $attachments = [];
         if ($files) {
             foreach ($files as $file) {
                 $directory = 'attachments/' . Str::random(32);
@@ -91,9 +91,9 @@ class MessageController extends Controller
                 ];
 
                 $attachment = MessageAttachment::create($model);
-                $attachments[] = $attachment;
+                // $attachments[] = $attachment;
             }
-            $message->attachments = $attachments;
+            // $message->attachments = $attachments;
         }
 
         if ($receiverId) {

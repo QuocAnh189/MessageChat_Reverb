@@ -1,6 +1,10 @@
 import React from "react";
-import { PaperClipIcon } from "@heroicons/react/20/solid";
+
+//helpers
 import { formatBytes, isPDF, isPreviewable } from "@/helpers";
+
+//icon
+import { PaperClipIcon } from "@heroicons/react/20/solid";
 
 const AttachmentPreview = ({ file }) => {
     return (

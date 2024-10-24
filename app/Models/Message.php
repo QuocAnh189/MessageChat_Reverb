@@ -17,7 +17,7 @@ class Message extends Model
         'sender_id',
         'group_id',
         'receiver_id',
-        // 'conversation_id'
+        'conversation_id'
     ];
 
     public function sender()
@@ -35,9 +35,10 @@ class Message extends Model
         return $this->belongsTo(Group::class);
     }
 
-    // public function conversation(){
-    //     return $this->belongsTo(Conversation::class);
-    // }
+    public function conversation()
+    {
+        return $this->belongsTo(Conversation::class);
+    }
 
     public function attachments()
     {

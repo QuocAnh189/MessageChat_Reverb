@@ -1,21 +1,25 @@
 import React, { useState } from "react";
+
+//components
+import NewMessageInput from "./NewMessageInput";
+import EmojiPicker from "emoji-picker-react";
+import { Popover, PopoverButton, PopoverPanel, Transition } from "@headlessui/react";
+import { isAudio, isImage, isPDF } from "@/helpers";
+import AttachmentPreview from "./AttachmentPreview";
+import CustomAudioPlayer from "./CustomAudioPlayer";
+import AudioRecorder from "./AudioRecorder";
+
+//icon
 import {
     PaperClipIcon,
     PhotoIcon,
     FaceSmileIcon,
     HandThumbUpIcon,
     PaperAirplaneIcon,
-    UsersIcon,
     XCircleIcon,
 } from "@heroicons/react/20/solid";
-import NewMessageInput from "./NewMessageInput";
-import EmojiPicker from "emoji-picker-react";
-import { Fragment } from "react";
-import { Popover, PopoverButton, PopoverPanel, Transition } from "@headlessui/react";
-import { isAudio, isImage, isPDF } from "@/helpers";
-import AttachmentPreview from "./AttachmentPreview";
-import CustomAudioPlayer from "./CustomAudioPlayer";
-import AudioRecorder from "./AudioRecorder";
+
+//socket
 import { useEventBus } from "@/EventBus";
 
 const MessageInput = ({ conversation = null }) => {

@@ -1,5 +1,6 @@
 import React from "react";
 
+//icon
 import UsersIcon from "@heroicons/react/20/solid/UsersIcon";
 
 const GroupAvatar = () => {

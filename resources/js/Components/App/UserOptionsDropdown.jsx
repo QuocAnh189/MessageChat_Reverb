@@ -1,7 +1,13 @@
 import React, { Fragment } from "react";
+import axios from "axios";
 
+//component
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
 
+//socket
+import { useEventBus } from "@/EventBus";
+
+//icon
 import {
     EllipsisVerticalIcon,
     LockClosedIcon,
@@ -9,8 +15,6 @@ import {
     ShieldCheckIcon,
     UserIcon,
 } from "@heroicons/react/20/solid";
-import axios from "axios";
-import { useEventBus } from "@/EventBus";
 
 function UserOptionsDropdown({ conversation }) {
     const { emit } = useEventBus();

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm, usePage } from "@inertiajs/react";
+
+//components
 import TextAreaInput from "../TextAreaInput";
 import InputLabel from "../InputLabel";
 import InputError from "../InputError";
@@ -8,6 +10,8 @@ import TextInput from "../TextInput";
 import SecondaryButton from "../SecondaryButton";
 import PrimaryButton from "../PrimaryButton";
 import UserPicker from "./UserPicker";
+
+//socket
 import { useEventBus } from "@/EventBus";
 
 export default function GroupModal({ show = false, onClose = () => {} }) {
@@ -23,7 +27,7 @@ export default function GroupModal({ show = false, onClose = () => {} }) {
         user_ids: [],
     });
 
-    const users = conversations.filter((c) => !c.is_group);
+    const users = conversations.filter((conversation) => !conversation.is_group);
 
     const createOrUpdateGroup = (e) => {
         e.preventDefault();
@@ -54,6 +58,7 @@ export default function GroupModal({ show = false, onClose = () => {} }) {
 
     useEffect(() => {
         return on("GroupModal.show", (group) => {
+            console.log("group", group);
             setData({
                 name: group.name,
                 description: group.description,
@@ -104,7 +109,7 @@ export default function GroupModal({ show = false, onClose = () => {} }) {
                         onSelect={(users) =>
                             setData(
                                 "user_ids",
-                                users.map((u) => u.id)
+                                users.map((user) => user.id)
                             )
                         }
                     />
