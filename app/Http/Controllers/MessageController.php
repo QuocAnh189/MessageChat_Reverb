@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Str;
 use App\Events\SocketMessage;
+use App\Events\SocketMessageDelete;
 use App\Events\SocketMessageUpdate;
 use App\Http\Requests\StoreMessageRequest;
 use App\Http\Resources\MessageResource;
@@ -126,28 +127,49 @@ class MessageController extends Controller
 
     public function destroy(Message $message)
     {
-        if ($message->sender_id !== Auth::id()) {
-            return response()->json(['message' => 'Forbidden'], 403);
+        if ($message->group_id) {
+            $group = Group::where('id', $message->group_id);
+            $isLastMessage = $group->where('last_message_id', $message->id)->exists();
+            if ($isLastMessage) {
+                $latestMessage = Message::where('group_id', $message->group_id)
+                    ->orderBy('created_at', 'desc')
+                    ->skip(1)
+                    ->first();
+
+                $group->update([
+                    'last_message_id' => $latestMessage ? $latestMessage->id : null,
+                ]);
+            }
+        } else {
+            $userId1 = $message->sender_id;
+            $userId2 = $message->receiver_id;
+
+            $conversation = Conversation::where(function ($query) use ($userId1, $userId2) {
+                $query->where('user_id1', $userId1)
+                    ->where('user_id2', $userId2);
+            })->orWhere(function ($query) use ($userId1, $userId2) {
+                $query->where('user_id1', $userId2)
+                    ->where('user_id2', $userId1);
+            });
+
+            $isLastMessage = $conversation->where('last_message_id', $message->id)->exists();
+
+            if ($isLastMessage) {
+                $latestMessage = Message::where('conversation_id', $message->conversation_id)
+                    ->orderBy('created_at', 'desc')
+                    ->skip(1)
+                    ->first();
+
+                $conversation->update([
+                    'last_message_id' => $latestMessage ? $latestMessage->id : null,
+                ]);
+            }
         }
 
-        $group = null;
-        $conversation = null;
-        if ($message->group_id) {
-            $group = Group::where('last_message_id', $message->id)->first();
-        } else {
-            $conversation = Conversation::where('last_message_id', $message->id)->first();
-        }
+        SocketMessageDelete::dispatch($message);
 
         $message->delete();
 
-        if ($group) {
-            $group = Group::find($group->id);
-            $lastMessage = $group->lastMessage;
-        } else  if ($conversation) {
-            $conversation = Conversation::find($conversation->id);
-            $lastMessage = $conversation->lastMessage;
-        }
-
-        return response()->json(['message' => $lastMessage ? new MessageResource($lastMessage) : null]);
+        return response()->json(['message' => 'Message deleted successfully']);
     }
 }

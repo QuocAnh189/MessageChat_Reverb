@@ -44,7 +44,6 @@ const Home = ({ selectedConversation = null, messages = null }) => {
     };
 
     const messageUpdated = (message) => {
-        console.log(message);
         setLocalMessages((prevMessages) => {
             return prevMessages.map((m) => {
                 return m.id === message.id ? message : m;
@@ -52,22 +51,10 @@ const Home = ({ selectedConversation = null, messages = null }) => {
         });
     };
 
-    const messageDeleted = ({ message }) => {
-        if (selectedConversation && selectedConversation.is_group && selectedConversation.id === message.group_id) {
-            setLocalMessages((prevMessages) => {
-                return prevMessages.filter((m) => m.id !== message.id);
-            });
-        }
-
-        if (
-            selectedConversation &&
-            selectedConversation.is_user &&
-            (selectedConversation.id == message.sender_id || selectedConversation.id == message.receiver_id)
-        ) {
-            setLocalMessages((prevMessages) => {
-                return prevMessages.filter((m) => m.id !== message.id);
-            });
-        }
+    const messageDeleted = (message) => {
+        setLocalMessages((prevMessages) => {
+            return prevMessages.filter((m) => m.id !== message.id);
+        });
     };
 
     const loadMoreMessages = useCallback(() => {

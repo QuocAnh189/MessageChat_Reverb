@@ -44,11 +44,4 @@ class Message extends Model
     {
         return $this->hasMany(MessageAttachment::class);
     }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function ($message) {});
-    }
 }

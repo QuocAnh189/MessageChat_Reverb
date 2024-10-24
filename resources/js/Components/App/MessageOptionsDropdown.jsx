@@ -10,24 +10,26 @@ import { EllipsisVerticalIcon, PencilSquareIcon, TrashIcon } from "@heroicons/re
 
 //socket
 import { useEventBus } from "@/EventBus";
+import ModalDeleteMessage from "./ModelDeleteMessage";
 
 function MessageOptionsDropdown({ message }) {
     const { emit } = useEventBus();
 
     const [modalEdit, setModalEdit] = useState(false);
+    const [modalDelete, setModalDelete] = useState(false);
 
     const onMessageDelete = () => {
         axios
             .delete(route("message.destroy", message.id))
             .then((res) => {
-                emit("message.deleted", { message, prevMessage: res.data.message });
+                emit("toast.show", res.data.message);
+                setModalDelete(false);
+                // emit("message.deleted", { message, prevMessage: res.data.message });
             })
             .catch((err) => {
                 console.log(err);
             });
     };
-
-    const onMessageEdit = () => {};
 
     return (
         <div className="absolute right-full text-gray-100 top-1/2 -translate-y-1/2 z-10">
@@ -68,7 +70,7 @@ function MessageOptionsDropdown({ message }) {
                             <MenuItem>
                                 {({ active }) => (
                                     <button
-                                        onClick={onMessageDelete}
+                                        onClick={() => setModalDelete(true)}
                                         className={`${
                                             active ? "bg-black/30 text-white" : "text-gray-100"
                                         } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
@@ -84,6 +86,7 @@ function MessageOptionsDropdown({ message }) {
             </Menu>
 
             <MessageModal show={modalEdit} onClose={() => setModalEdit(false)} message={message} />
+            <ModalDeleteMessage isOpen={modalDelete} setIsOpen={setModalDelete} onDelete={onMessageDelete} />
         </div>
     );
 }

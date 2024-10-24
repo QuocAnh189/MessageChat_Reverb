@@ -28,7 +28,6 @@ export default function MessageModal({ show = false, onClose = () => {}, message
             .put(route("message.update", message.id), data)
             .then((res) => {
                 emit("toast.show", "Message update successfully");
-                // emit("message.updated", res.data);
                 onClose();
             })
             .catch((err) => {

@@ -39,7 +39,6 @@ export default function Authenticated({ header, children }) {
                 .error((error) => console.error("Echo error", error))
                 .listen("SocketMessage", (e) => {
                     const message = e.message;
-                    // console.log(message);
 
                     emit("message.created", message);
 
@@ -62,9 +61,18 @@ export default function Authenticated({ header, children }) {
                 .listen("SocketMessageUpdate", (e) => {
                     const message = e.message;
 
+                    emit("message.updated", message);
+
+                    if (message.sender_id === user.id) {
+                        return;
+                    }
+                })
+                .listen("SocketMessageDelete", (e) => {
+                    const message = e.message;
+
                     console.log(message);
 
-                    emit("message.updated", message);
+                    emit("message.deleted", message);
 
                     if (message.sender_id === user.id) {
                         return;
