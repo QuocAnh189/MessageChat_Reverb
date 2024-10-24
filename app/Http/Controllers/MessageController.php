@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Str;
 use App\Events\SocketMessage;
+use App\Events\SocketMessageUpdate;
 use App\Http\Requests\StoreMessageRequest;
 use App\Http\Resources\MessageResource;
 use App\Models\Conversation;
@@ -13,6 +14,7 @@ use App\Models\MessageAttachment;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
@@ -105,6 +107,19 @@ class MessageController extends Controller
         }
 
         SocketMessage::dispatch($message);
+
+        return new MessageResource($message);
+    }
+
+    public function update(Message $message, Request $request)
+    {
+        if ($message->sender_id !== Auth::id()) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        $message->update($request->all());
+
+        SocketMessageUpdate::dispatch($message);
 
         return new MessageResource($message);
     }

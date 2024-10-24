@@ -58,6 +58,17 @@ export default function Authenticated({ header, children }) {
                                     : message.attachments.length + " attachments"
                             }`,
                     });
+                })
+                .listen("SocketMessageUpdate", (e) => {
+                    const message = e.message;
+
+                    console.log(message);
+
+                    emit("message.updated", message);
+
+                    if (message.sender_id === user.id) {
+                        return;
+                    }
                 });
 
             if (conversation.is_group) {

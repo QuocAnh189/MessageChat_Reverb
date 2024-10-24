@@ -1,17 +1,20 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import axios from "axios";
 
 //components
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
+import MessageModal from "./MessageModal";
 
 //icon
-import { EllipsisVerticalIcon, TrashIcon } from "@heroicons/react/20/solid";
+import { EllipsisVerticalIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/20/solid";
 
 //socket
 import { useEventBus } from "@/EventBus";
 
 function MessageOptionsDropdown({ message }) {
     const { emit } = useEventBus();
+
+    const [modalEdit, setModalEdit] = useState(false);
 
     const onMessageDelete = () => {
         axios
@@ -49,12 +52,12 @@ function MessageOptionsDropdown({ message }) {
                             <MenuItem>
                                 {({ active }) => (
                                     <button
-                                        onClick={onMessageEdit}
+                                        onClick={() => setModalEdit(true)}
                                         className={`${
                                             active ? "bg-black/30 text-white" : "text-gray-100"
                                         } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                     >
-                                        <TrashIcon className="w-4 h-4 mr-2" />
+                                        <PencilSquareIcon className="w-4 h-4 mr-2" />
                                         Edit
                                     </button>
                                 )}
@@ -79,6 +82,8 @@ function MessageOptionsDropdown({ message }) {
                     </MenuItems>
                 </Transition>
             </Menu>
+
+            <MessageModal show={modalEdit} onClose={() => setModalEdit(false)} message={message} />
         </div>
     );
 }

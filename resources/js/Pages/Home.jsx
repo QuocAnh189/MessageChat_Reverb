@@ -30,7 +30,6 @@ const Home = ({ selectedConversation = null, messages = null }) => {
     const [showAttachmentPreview, setShowAttachmentPreview] = useState(false);
 
     const messageCreated = (message) => {
-        console.log(selectedConversation, message);
         if (selectedConversation && selectedConversation.is_group && selectedConversation.id == message.group_id) {
             setLocalMessages((prevMessages) => [...prevMessages, message]);
         }
@@ -42,6 +41,15 @@ const Home = ({ selectedConversation = null, messages = null }) => {
         ) {
             setLocalMessages((prevMessages) => [...prevMessages, message]);
         }
+    };
+
+    const messageUpdated = (message) => {
+        console.log(message);
+        setLocalMessages((prevMessages) => {
+            return prevMessages.map((m) => {
+                return m.id === message.id ? message : m;
+            });
+        });
     };
 
     const messageDeleted = ({ message }) => {
@@ -101,6 +109,7 @@ const Home = ({ selectedConversation = null, messages = null }) => {
         }, 10);
 
         const offCreated = on("message.created", messageCreated);
+        const offUpdated = on("message.updated", messageUpdated);
         const offDeleted = on("message.deleted", messageDeleted);
 
         setScrollFromBottom(0);
@@ -108,6 +117,7 @@ const Home = ({ selectedConversation = null, messages = null }) => {
 
         return () => {
             offCreated();
+            offUpdated();
             offDeleted();
         };
     }, [selectedConversation]);

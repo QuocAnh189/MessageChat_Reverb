@@ -5,16 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
-class MessageAttachment extends Model
+class GroupUsers extends Model
 {
     use HasFactory;
 
+    protected $table = 'group_users';
+
     protected $fillable = [
-        'message_id',
-        'name',
-        'path',
-        'mime',
-        'size'
+        'group_id',
+        'user_id',
     ];
 }
